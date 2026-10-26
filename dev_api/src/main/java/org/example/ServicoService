@@ -1,0 +1,45 @@
+package com.senai.projeto.service;
+
+import com.senai.projeto.entity.ServicosEntity;
+import com.senai.projeto.repository.ServicosRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+
+public class ServicosService {
+    @Autowired
+    private ServicosRepository servicosRepository;
+
+    public List<ServicosEntity> listarTodos() {
+        return servicosRepository.findAll();
+    }
+    public ServicosEntity salvarServicos(ServicosEntity servicos) {
+        if (servicos.getId() != null && servicosRepository.existsById(servicos.getId())) {
+            throw new IllegalArgumentException("Serviço já cadastrado.");
+        }
+        return servicosRepository.save(servicos);
+
+    }
+
+    public ServicosEntity atualizar(Long id, ServicosEntity servicos) {
+
+        if (!servicosRepository.existsById(id))
+            throw new IllegalArgumentException("Serviço não encontrado.");
+        servicos.setId(id);
+        return servicosRepository.save(servicos);
+    }
+    // delete - excluir o cliente.
+    public void excluirServicos(Long id) {
+
+        // verifica se o cliente está cadastrado.
+        // caso não esteja, não excluirá os dados.
+        if (!servicosRepository.existsById(id))
+            throw new IllegalArgumentException("Serviço não encontrado.");
+
+        //irá excluir um cliente com id cadastrado.
+        servicosRepository.deleteById(id);
+    }
+}
