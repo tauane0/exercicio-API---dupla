@@ -1,0 +1,50 @@
+package com.senai.projeto.controller;
+import java.util.List;
+import com.senai.projeto.entity.FornecedoresEntity;
+import com.senai.projeto.service.FornecedoresService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/fornecedores")
+
+public class FornecedoresController {
+    @Autowired
+    private FornecedoresService fornecedoresService;
+
+    @GetMapping
+    public List<FornecedoresEntity>listar(){
+        return fornecedoresService.listarTodos();
+    }
+
+    @PostMapping
+    ResponseEntity<Map<?, ?>> salvar(@RequestBody FornecedoresEntity fornecedores) {
+        fornecedoresService.salvarFornecedores(fornecedores);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of("mensagem", "Fornecedor cadastrado com sucesso."));
+
+    }
+    @PutMapping("/{id}")
+    ResponseEntity<Map<?, ?>> atualizar(
+            @PathVariable Long id,
+            @RequestBody FornecedoresEntity fornecedores) {
+        fornecedoresService.atualizar(id, fornecedores);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Map.of("mensagem","Fornecedor atualizado com sucesso."));
+
+    }
+    @DeleteMapping("/{id}")
+    ResponseEntity<Map<?,?>> excluir(@PathVariable Long id) {
+        fornecedoresService.excluirFornecedores(id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Map.of("mensagem","Fornecedor removido com sucesso."));
+    }
+}
