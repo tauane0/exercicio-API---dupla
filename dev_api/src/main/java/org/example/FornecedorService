@@ -1,0 +1,41 @@
+package com.senai.projeto.service;
+
+import java.util.List;
+import com.senai.projeto.entity.FornecedoresEntity;
+import com.senai.projeto.repository.FornecedoresRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+@Service
+
+public class FornecedoresService {
+    @Autowired
+    private FornecedoresRepository fornecedoresRepository;
+
+    public List<FornecedoresEntity>  listarTodos() {
+        return fornecedoresRepository.findAll();
+    }
+    public FornecedoresEntity salvarFornecedores(FornecedoresEntity fornecedores) {
+        if (fornecedoresRepository.findByCnpj(fornecedores.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Fornecedor já cadastrado.");
+        }
+        return fornecedoresRepository.save(fornecedores);
+
+    }
+    public FornecedoresEntity atualizar(Long id, FornecedoresEntity fornecedores) {
+
+        if (!fornecedoresRepository.existsById(id))
+            throw new IllegalArgumentException("Fornecedor não encontrado.");
+        fornecedores.setId(id);
+        return fornecedoresRepository.save(fornecedores);
+    }
+    // delete - excluir o Fornecedor.
+    public void excluirFornecedores(Long id) {
+
+        // verifica se o Fornecedor está cadastrado.
+        if (!fornecedoresRepository.existsById(id)) {
+            throw new IllegalArgumentException("Fornecedor não encontrado.");
+    }
+            //irá excluir um fornecedor com id cadastrado.
+        fornecedoresRepository.deleteById(id);
+    }
+}
