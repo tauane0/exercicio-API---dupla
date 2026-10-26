@@ -1,0 +1,24 @@
+package com.senai.projeto.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table (name = "tab_fornecedores")
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+
+public class FornecedoresEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    
+    private String RazaoSocial;
+    private String cnpj;
+    private String email;
+    private String telefone;
+}
