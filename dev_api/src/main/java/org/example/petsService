@@ -1,1 +1,44 @@
+package com.senai.projeto.service;
+
+import com.senai.projeto.entity.PetsEntity;
+import com.senai.projeto.repository.PetsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+@Service
+
+public class PetsService {
+    @Autowired
+    private PetsRepository petsRepository;
+
+    public List<PetsEntity> listarTodos() {
+        return petsRepository.findAll();
+    }
+    public PetsEntity salvarPets(PetsEntity pets) {
+        if (pets.getId() != null && petsRepository.existsById(pets.getId())) {
+            throw new IllegalArgumentException("Pets já cadastrado.");
+        }
+        return petsRepository.save(pets);
+
+    }
+
+    public PetsEntity atualizar(Long id, PetsEntity pets) {
+
+        if (!petsRepository.existsById(id))
+            throw new IllegalArgumentException("Pets não encontrado.");
+        pets.setId(id);
+        return petsRepository.save(pets);
+    }
+    // delete - excluir o cliente.
+    public void excluirPets(Long id) {
+
+        // verifica se o cliente está cadastrado.
+        // caso não esteja, não excluirá os dados.
+        if (!petsRepository.existsById(id))
+            throw new IllegalArgumentException("Pets não encontrado.");
+
+        //irá excluir um cliente com id cadastrado.
+        petsRepository.deleteById(id);
+    }
+}
 
