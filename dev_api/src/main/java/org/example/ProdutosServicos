@@ -1,0 +1,46 @@
+package com.senai.projeto.service;
+
+import com.senai.projeto.entity.ProdutoEntity;
+import com.senai.projeto.repository.ProdutoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+
+public class ProdutoService {
+
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
+    public List<ProdutoEntity> listarTodos() {
+        return produtoRepository.findAll();
+    }
+    public ProdutoEntity salvarProduto(ProdutoEntity produto) {
+        if ( produto.getId() != null && produtoRepository.existsById(produto.getId())) {
+            throw new IllegalArgumentException("Produto já cadastrado.");
+        }
+        return produtoRepository.save(produto);
+
+    }
+
+    public ProdutoEntity atualizar(Long id, ProdutoEntity produto) {
+
+        if (!produtoRepository.existsById(id))
+            throw new IllegalArgumentException("Produto não encontrado.");
+        produto.setId(id);
+        return produtoRepository.save(produto);
+    }
+    // delete - excluir o cliente.
+    public void excluirProduto(Long id) {
+
+        // verifica se o cliente está cadastrado.
+        // caso não esteja, não excluirá os dados.
+        if (!produtoRepository.existsById(id))
+            throw new IllegalArgumentException("Produto não encontrado.");
+
+        //irá excluir um cliente com id cadastrado.
+        produtoRepository.deleteById(id);
+    }
+}
