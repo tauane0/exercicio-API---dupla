@@ -17,4 +17,3 @@ public class GlobalException {
                 .body(Map.of("mensagem", erro.getMessage()));
     }
 }
-
