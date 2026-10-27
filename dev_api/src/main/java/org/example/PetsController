@@ -1,0 +1,50 @@
+package com.senai.projeto.controller;
+
+import com.senai.projeto.entity.PetsEntity;
+import com.senai.projeto.service.PetsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/pets")
+
+public class PetsController {
+    @Autowired
+    private PetsService petsService;
+
+    @GetMapping
+    public List<PetsEntity> listar(){
+        return petsService.listarTodos();}
+
+    //ADICIONAR
+    @PostMapping
+    ResponseEntity<Map<?, ?>> salvar(@RequestBody PetsEntity pets){
+        petsService.salvarPets(pets);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of("mensagem", "Pets cadastrado com sucesso."));
+    }
+    //ATUALIZAR
+    @PutMapping("/{id}")
+    ResponseEntity<Map<?, ?>> atualizar(
+            @PathVariable Long id,
+            @RequestBody PetsEntity pets) {
+        petsService.atualizar(id, pets);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Map.of("mensagem", "Pets atualizado com sucesso."));
+    }
+    //DELETAR
+    @DeleteMapping("/{id}")
+    ResponseEntity<Map<?,?>> excluir(@PathVariable Long id) {
+        petsService.excluirPets(id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Map.of("mensagem","Pets removido com sucesso."));
+    }
+}
