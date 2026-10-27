@@ -1,0 +1,50 @@
+package com.senai.projeto.controller;
+
+import com.senai.projeto.entity.ServicosEntity;
+import com.senai.projeto.service.ServicosService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Map;
+
+@RequestMapping("/servicos")
+@RestController
+
+public class ServicosController {
+    @Autowired
+    private ServicosService servicosService;
+
+    @GetMapping
+    public List<ServicosEntity> listar(){
+        return servicosService.listarTodos();}
+
+    //ADICIONAR
+    @PostMapping
+    ResponseEntity<Map<?, ?>> salvar(@RequestBody ServicosEntity servicos){
+        servicosService.salvarServicos(servicos);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of("mensagem", "Serviço cadastrado com sucesso."));
+    }
+    //ATUALIZAR
+    @PutMapping("/{id}")
+    ResponseEntity<Map<?, ?>> atualizar(
+            @PathVariable Long id,
+            @RequestBody ServicosEntity servicos) {
+        servicosService.atualizar(id, servicos);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Map.of("mensagem", "Serviço atualizado com sucesso."));
+    }
+    //DELETAR
+    @DeleteMapping("/{id}")
+    ResponseEntity<Map<?,?>> excluir(@PathVariable Long id) {
+        servicosService.excluirServicos(id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Map.of("mensagem","Serviço removido com sucesso."));
+    }
+}
