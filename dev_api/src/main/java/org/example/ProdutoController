@@ -1,0 +1,51 @@
+package com.senai.projeto.controller;
+
+import com.senai.projeto.entity.ProdutoEntity;
+import com.senai.projeto.service.ProdutoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+@RequestMapping("/produtos")
+@RestController
+
+public class ProdutoController {
+    @Autowired
+    private ProdutoService produtoService;
+
+    @GetMapping
+    public List<ProdutoEntity> listar(){
+        return produtoService.listarTodos();}
+
+    //ADICIONAR
+    @PostMapping
+    ResponseEntity<Map<?, ?>> salvar(@RequestBody ProdutoEntity produto){
+        produtoService.salvarProduto(produto);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of("mensagem", "Produto cadastrado com sucesso."));
+    }
+    //ATUALIZAR
+    @PutMapping("/{id}")
+    ResponseEntity<Map<?, ?>> atualizar(
+            @PathVariable Long id,
+            @RequestBody ProdutoEntity produto) {
+        produtoService.atualizar(id, produto);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Map.of("mensagem", "Produto atualizado com sucesso."));
+    }
+    //DELETAR
+    @DeleteMapping("/{id}")
+    ResponseEntity<Map<?,?>> excluir(@PathVariable Long id) {
+        produtoService.excluirProduto(id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Map.of("mensagem","Produto removido com sucesso."));
+    }
+}
