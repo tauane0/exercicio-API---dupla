@@ -1,0 +1,50 @@
+package com.senai.projeto.controller;
+
+import java.util.List;
+import java.util.Map;
+import com.senai.projeto.entity.FuncionariosEntity;
+import com.senai.projeto.service.FuncionariosService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/funcionarios")
+
+public class FuncionariosController {
+    @Autowired
+    private FuncionariosService funcionariosService;
+
+    @GetMapping
+    public List<FuncionariosEntity>listar(){
+        return funcionariosService.listarTodos();
+    }
+
+    @PostMapping
+    ResponseEntity<Map<?, ?>> salvar(@RequestBody FuncionariosEntity funcionarios) {
+        funcionariosService.salvarFuncionarios(funcionarios);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(Map.of("mensagem", "Funcionário cadastrado com sucesso."));
+
+    }
+    @PutMapping("/{id}")
+    ResponseEntity<Map<?, ?>> atualizar(
+            @PathVariable Long id,
+            @RequestBody FuncionariosEntity funcionarios) {
+        funcionariosService.atualizar(id, funcionarios);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Map.of("mensagem","Funcionário atualizado com sucesso."));
+
+    }
+    @DeleteMapping("/{id}")
+    ResponseEntity<Map<?,?>> excluir(@PathVariable Long id) {
+        funcionariosService.excluirFuncionarios(id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(Map.of("mensagem","Funcionário removido com sucesso."));
+    }
+}
