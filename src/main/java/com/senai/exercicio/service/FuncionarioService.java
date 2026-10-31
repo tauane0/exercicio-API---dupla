@@ -24,7 +24,6 @@ public class FuncionarioService {
     }
 
     // INSERT - SALVAR UM FUNCIONÁRIO
-    // INSERT - SALVAR UM FUNCIONÁRIO
     public FuncionarioEntity salvarFuncionario(FuncionarioEntity funcionario) {
         // Verifica se já existe um funcionário com esse e-mail
         if (repository.findByEmail(funcionario.getEmail()).isPresent()) {
